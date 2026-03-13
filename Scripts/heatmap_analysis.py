@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 print("Libraries loaded")
 
 # Load processed dataset
-df = pd.read_csv("PreProcessed-Data/alsfrs_demo_fvc.csv")
+df = pd.read_csv("PreProcessed-Data/alsfrs_demo_fvc_vitals_muscle.csv")
 # drop identifier column
 df = df.drop(columns=["subject_id"])
 

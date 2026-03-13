@@ -9,7 +9,8 @@ import numpy as np
 print("Libraries loaded")
 
 # Load dataset
-df = pd.read_csv("PreProcessed-Data/alsfrs_demo_fvc.csv")
+df = pd.read_csv("PreProcessed-Data/alsfrs_demo_fvc_vitals_muscle.csv")
+
 
 print("Dataset loaded")
 print("Shape:", df.shape)
