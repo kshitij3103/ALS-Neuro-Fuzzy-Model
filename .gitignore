@@ -1,14 +1,1 @@
-# Python cache
-__pycache__/
-*.pyc
-
-# Virtual environment
-venv/
-# Ignore raw datasets
-Original-Data/
-
-
-
-# OS files
-.DS_Store
-Thumbs.db
+data/raw-data/F_PROACT_LABS.csv
