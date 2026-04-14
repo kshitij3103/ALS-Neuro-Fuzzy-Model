@@ -75,4 +75,4 @@ output_file = 'analysis/final_als_pipeline_v3_highres'
 # Render as PNG, cleanup temporary dot file
 dot.render(output_file, format='png', cleanup=True)
 
-print(f"Bhai, high-resolution flowchart check karo: {output_file}.png")
+print(f" flowchart check ready: {output_file}.png")

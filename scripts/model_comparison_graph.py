@@ -76,4 +76,4 @@ plt.savefig(save_path, dpi=300, bbox_inches='tight')
 plt.show()
 
 print(f"\n--- SUCCESS ---")
-print(f"Graph aesthetic_model_comparison.png ab '{output_dir}' folder mein mehfooz hai.")
+print(f"Graph aesthetic_model_comparison.png ab '{output_dir}' ")

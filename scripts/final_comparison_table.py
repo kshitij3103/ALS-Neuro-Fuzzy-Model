@@ -9,7 +9,7 @@ comparison_data = [
     # Category | Model | PCC | RMSD
     ['Baseline', 'Linear Regression', 0.3690, 0.5529],
     ['Baseline', 'Random Forest', 0.4130, 0.5423],
-    ['Proposed', 'ANFIS (Neuro-Fuzzy)', 0.3977, 0.5292],
+    ['Proposed', 'ANFIS (Neuro-Fuzzy)', '0.4088 ± 0.0245', '0.5390 ± 0.0280'],
     
     ['Literature', 'CNN', 0.4390, 0.5270],
     ['Literature', 'FFNN', 0.4510, 0.5280],
