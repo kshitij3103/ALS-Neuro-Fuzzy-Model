@@ -3,7 +3,7 @@ import numpy as np
 
 df = pd.read_csv("data/raw-data/F_PROACT_FVC.csv")
 
-# Rule: Use the maximum liter value from the 3 trials 
+
 df["fvc_max"] = df[["Subject_Liters_Trial_1", "Subject_Liters_Trial_2", "Subject_Liters_Trial_3"]].max(axis=1)
 df_3m = df[(df["Forced_Vital_Capacity_Delta"] >= 0) & (df["Forced_Vital_Capacity_Delta"] <= 90)]
 

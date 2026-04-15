@@ -1,21 +1,21 @@
 import pandas as pd
 import numpy as np
 
-# Correct Input: Unified file which has both Original and Revised patients
+
 INPUT_PATH = "data/Preprocessed-data/ALSFRS_unified.csv" 
 OUTPUT_PATH = "data/Preprocessed-data/ALSFRS_features.csv"
 
 alsfrs = pd.read_csv(INPUT_PATH)
 
-# Filter first 3 months (0-90 days)
+
 alsfrs = alsfrs[alsfrs["ALSFRS_Delta"] <= 90]
 
-# Questions + Unified Total Score as features
+
 question_cols = [
     "Q1_Speech", "Q2_Salivation", "Q3_Swallowing", "Q4_Handwriting", "Q5_Unified",
     "Q6_Dressing_and_Hygiene", "Q7_Turning_in_Bed", "Q8_Walking", "Q9_Climbing_Stairs", "Q10_Unified"
 ]
-# Yahan 'ALSFRS_Total_Unified' add kiya gaya hai
+
 longitudinal_features = ["ALSFRS_Total_Unified"] + question_cols
 
 def summarize_feature(values, times):

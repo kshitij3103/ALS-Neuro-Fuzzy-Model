@@ -6,7 +6,7 @@ OUTPUT_PATH = "data/Preprocessed-data/VitalSigns_features.csv"
 
 vital = pd.read_csv(INPUT_PATH, low_memory=False)
 
-# Keep only the 5 specific variables used in the paper
+
 variables = ["Blood_Pressure_Diastolic", "Blood_Pressure_Systolic", "Pulse", "Respiratory_Rate", "Weight"]
 cols = ["subject_id", "Vital_Signs_Delta"] + variables
 vital = vital[cols]
@@ -19,7 +19,6 @@ vital.loc[(vital["Weight"] < 30) | (vital["Weight"] > 200), "Weight"] = np.nan
 vital.loc[(vital["Blood_Pressure_Systolic"] < 70) | (vital["Blood_Pressure_Systolic"] > 220), "Blood_Pressure_Systolic"] = np.nan
 vital.loc[(vital["Blood_Pressure_Diastolic"] < 40) | (vital["Blood_Pressure_Diastolic"] > 140), "Blood_Pressure_Diastolic"] = np.nan
 
-# Time window filtering
 vital = vital[(vital["Vital_Signs_Delta"] >= 0) & (vital["Vital_Signs_Delta"] <= 90)]
 
 rows = []
@@ -45,7 +44,7 @@ for pid, group in vital.groupby("subject_id"):
     rows.append(features)
 
 features_df = pd.DataFrame(rows)
-# Clean weight slope outliers as per your original logic
+# Clean some outliers
 features_df.loc[(features_df["Weight_slope"] < -5) | (features_df["Weight_slope"] > 5), "Weight_slope"] = np.nan
 features_df.to_csv(OUTPUT_PATH, index=False)
 print(f"VitalSigns features saved. Final Shape: {features_df.shape} (35 features + ID)")

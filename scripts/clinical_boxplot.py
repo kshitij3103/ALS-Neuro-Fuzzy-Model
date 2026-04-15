@@ -3,18 +3,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# 1. Setup
+
 output_dir = 'analysis'
 data = pd.read_csv('data/Preprocessed-data/MASTER_RAW_DATA.csv')
 
-# 2. Category Create Karein (Based on your previous plot threshold -1.1)
+
 threshold = -1.1
 data['Progression_Category'] = ['Fast' if x < threshold else 'Slow' for x in data['target_slope']]
 
-# 3. Select Top 3 Features from your RF Importance
+
 top_3 = ['Onset_Duration', 'ALSFRS_Total_Unified_first', 'FVC_slope']
 
-# 4. AESTHETIC VISUALIZATION
 sns.set_theme(style="whitegrid", font_scale=1.2)
 fig, axes = plt.subplots(1, 3, figsize=(20, 7))
 

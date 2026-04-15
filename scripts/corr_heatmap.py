@@ -4,37 +4,35 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
-# 1. Directory Setup
+
 output_dir = 'analysis'
 if not os.path.exists(output_dir): os.makedirs(output_dir)
 
-# 2. Load Data
+
 data = pd.read_csv('data/Preprocessed-data/MASTER_RAW_DATA.csv')
 
-# 3. Define Top 10 + Target Variable (Based on your latest RF image)
+
 top_10_plus_target = [
     'Onset_Duration', 'ALSFRS_Total_Unified_first', 'ALSFRS_Total_Unified_median',
     'ALSFRS_Total_Unified_last', 'ALSFRS_Total_Unified_slope', 'ALSFRS_Total_Unified_min',
     'ALSFRS_Total_Unified_max', 'Weight_slope', 'FVC_slope', 'Q1_Speech_min',
-    'target_slope' # Label to predict
+    'target_slope' 
 ]
 
-# Filter and calculate correlation
 corr_matrix = data[top_10_plus_target].corr()
 
-# 4. AESTHETIC VISUALIZATION
 plt.figure(figsize=(15, 12))
 sns.set_theme(style="white")
 
 
 
-# Plotting with professional color palette
+
 heatmap = sns.heatmap(
     corr_matrix, 
     
     annot=True, 
     fmt=".2f", 
-    cmap='coolwarm', # Red (Positive) / Blue (Negative)
+    cmap='coolwarm', #red +ve blue -ve
     vmin=-1, vmax=1, 
     center=0,
     square=True, 
@@ -47,7 +45,6 @@ plt.title('Top 10 Clinical Features: Correlation Matrix (PCC)', fontsize=24, fon
 plt.xticks(rotation=45, ha='right', fontsize=12)
 plt.yticks(fontsize=12)
 
-# Save to Analysis Folder
 plt.tight_layout()
 save_path = os.path.join(output_dir, 'heatmap.png')
 plt.savefig(save_path, dpi=300)

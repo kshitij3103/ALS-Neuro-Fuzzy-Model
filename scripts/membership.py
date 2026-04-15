@@ -4,12 +4,11 @@ import matplotlib.pyplot as plt
 def gaussian_mf(x, mu, sigma):
     return np.exp(-0.5 * ((x - mu) / sigma)**2)
 
-# Features ke ranges (Actual values from your dataset)
-# Onset_Duration (0 to 3500 approx)
-x = np.linspace(0, 1, 100) # Normalized range
 
-# Gaussian Parameters (Jo model ne seekhe honge)
-mus = [0.2, 0.5, 0.8]   # Low, Medium, High
+x = np.linspace(0, 1, 100) 
+
+
+mus = [0.2, 0.5, 0.8]  
 sigmas = [0.1, 0.1, 0.1]
 
 plt.figure(figsize=(10, 6))

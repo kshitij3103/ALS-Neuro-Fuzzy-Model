@@ -19,14 +19,12 @@ TARGET_COL     = 'target_slope'
 SUBJECT_COL    = 'subject_id'
 N_FOLDS        = 5
 N_EPOCHS       = 15
-N_CLUSTERS     = 10         # Back to 10 — contradiction checker handles bad rules
-LSE_LAMBDA     = 0.1        # Reduced from 2.0 — prevents consequent flattening
+N_CLUSTERS     = 10        
+LSE_LAMBDA     = 0.1        
 ENSEMBLE_SEEDS = [42, 52, 62]
 
 
-# ==========================================
-# HYBRID ANFIS ARCHITECTURE
-# ==========================================
+
 class ClusterANFIS(nn.Module):
     def __init__(self, num_inputs=5, num_clusters=10, initial_centers=None):
         super(ClusterANFIS, self).__init__()
@@ -59,7 +57,7 @@ class ClusterANFIS(nn.Module):
     def lse_update(self, x, y, lam=LSE_LAMBDA):
         """
         Hybrid learning: least-squares update for consequent parameters.
-        lam controls regularization — lower = more expressive consequents.
+        
         """
         with torch.no_grad():
             w_norm = self.forward_premise(x)
@@ -70,9 +68,7 @@ class ClusterANFIS(nn.Module):
             self.consequent_params.copy_(new_params)
 
 
-# ==========================================
-# FOLD-LEVEL IMPUTATION
-# ==========================================
+#imputation for each fold
 def impute_with_train_median(X_tr: np.ndarray, X_te: np.ndarray):
     medians = np.nanmedian(X_tr, axis=0)
     for col in range(X_tr.shape[1]):
@@ -81,9 +77,7 @@ def impute_with_train_median(X_tr: np.ndarray, X_te: np.ndarray):
     return X_tr, X_te
 
 
-# ==========================================
-# SINGLE ENSEMBLE MEMBER TRAINING
-# ==========================================
+#ensemble training
 def train_member(X_tr_scaled, y_tr_scaled, seed,
                  n_epochs=N_EPOCHS, n_clusters=N_CLUSTERS):
     kmeans = KMeans(n_clusters=n_clusters, random_state=seed, n_init=10)
@@ -107,9 +101,7 @@ def train_member(X_tr_scaled, y_tr_scaled, seed,
     return model
 
 
-# ==========================================
-# MAIN VALIDATION LOOP
-# ==========================================
+
 def run_final_validation(k=N_FOLDS):
     data = pd.read_csv(DATA_PATH)
 

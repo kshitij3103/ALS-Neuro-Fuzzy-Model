@@ -4,7 +4,7 @@ demo = pd.read_csv("data/raw-data/F_PROACT_DEMOGRAPHICS.csv")[["subject_id", "Ag
 
 rilu = pd.read_csv("data/raw-data/F_PROACT_RILUZOLE.csv")[["subject_id", "Subject_used_Riluzole"]]
 
-# Merge all static info
+
 static = demo.merge(rilu, on="subject_id", how="outer")
 
 # Encode categories for the model
