@@ -117,9 +117,6 @@ def generate_graph():
     print(f"Best PCC: epoch {best_ep} → {test_pccs[best_ep-1]:.4f}")
     print(f"Epoch 20 PCC: {test_pccs[-1]:.4f}")
 
-    # ==========================================
-    # PLOT
-    # ==========================================
     fig, ax1 = plt.subplots(figsize=(11, 5))
     fig.patch.set_facecolor('white')
     ax1.set_facecolor('#FAFAFA')
@@ -139,16 +136,16 @@ def generate_graph():
              label='Validation PCC')
     ax2.tick_params(axis='y', labelcolor='#2471A3')
 
-    # Best epoch line
+    
     ax2.axvline(x=best_ep, color='#27AE60', linestyle='--',
                 linewidth=1.8, label=f'Best PCC (Epoch {best_ep})')
 
-    # Epoch 20 cutoff — only draw if different from best
+    
     if best_ep != 20:
         ax2.axvline(x=20, color='#8E44AD', linestyle=':',
                     linewidth=1.8, label='Selected Cutoff (Epoch 20)')
 
-    # Simple text label at top of best epoch line (no arrow)
+    
     ax2.text(best_ep + 0.3, ax2.get_ylim()[1] * 0.995,
              f'Peak (Ep {best_ep})', color='#27AE60',
              fontsize=8, va='top')

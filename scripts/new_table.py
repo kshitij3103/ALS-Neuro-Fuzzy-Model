@@ -37,7 +37,7 @@ def extract_rules_from_saved_model():
     out_scaled   = mean_consequents.reshape(n_clusters, n_features + 1)[:, -1]
     outcomes_raw = sc_y.inverse_transform(out_scaled.reshape(-1, 1)).flatten()
 
-    # Per-feature thresholds
+
     thresholds = {}
     for feat in features:
         col = raw_df[feat].dropna()
@@ -49,7 +49,7 @@ def extract_rules_from_saved_model():
         elif val <= q66: return f"Medium\n({q33:.1f}-{q66:.1f})"
         else:            return f"High\n(>{q66:.1f})"
 
-    # Patient support
+   
     X_raw = raw_df[features].values.astype(float)
     meds  = np.nanmedian(X_raw, axis=0)
     for c in range(X_raw.shape[1]):
@@ -58,7 +58,7 @@ def extract_rules_from_saved_model():
     dists   = np.linalg.norm(X_sc[:, np.newaxis] - mean_centers, axis=2)
     support = np.bincount(np.argmin(dists, axis=1), minlength=n_clusters)
 
-    # Build sorted table
+   
     rows = []
     for i in range(n_clusters):
         row = []
@@ -74,9 +74,7 @@ def extract_rules_from_saved_model():
             .reset_index(drop=True))
     df.insert(0, "Rank", range(1, len(df) + 1))
 
-    # ==========================================
-    # DRAW TABLE USING MATPLOTLIB TABLE
-    # ==========================================
+   
     col_headers = ["Rank", "Onset\nDuration", "ALSFRS\nMedian",
                    "FVC\nSlope", "Weight\nSlope", "Speech\n(Q1)",
                    "Outcome", "Support"]
@@ -104,19 +102,19 @@ def extract_rules_from_saved_model():
 
     tbl.auto_set_font_size(False)
     tbl.set_fontsize(9)
-    tbl.scale(1, 3.2)   # scale(width_factor, height_factor) — height=3.2 gives plenty of row space
+    tbl.scale(1, 3.2)  
 
     n_rows = len(cell_data)
     n_cols = len(col_headers)
 
-    # Style header row
+   
     for ci in range(n_cols):
         cell = tbl[0, ci]
         cell.set_facecolor(header_bg)
         cell.set_text_props(color='white', fontweight='bold', fontsize=9)
         cell.set_edgecolor('#AAAAAA')
 
-    # Style data rows
+   
     outcome_col_idx = col_headers.index("Outcome")
     for ri in range(1, n_rows + 1):
         bg = row_bg[(ri - 1) % 2]
@@ -131,7 +129,6 @@ def extract_rules_from_saved_model():
                 cell.set_facecolor(bg)
                 cell.set_text_props(fontsize=9)
 
-    # Column widths
     col_widths_map = {
         0: 0.04,   # Rank
         1: 0.13,   # Onset Duration

@@ -7,28 +7,25 @@ if os.path.exists(file_path):
     df = pd.read_csv(file_path)
     print(f"--- INSPECTING: {os.path.basename(file_path)} ---")
     
-    # 1. Exact Column Names
-    # Identifying the ID, Time Delta, and specific vital sign columns
+  
     print("\n[1] EXACT COLUMN NAMES:")
     print(df.columns.tolist())
     
-    # 2. Key Vital Sign Features
-    # Looking for Weight, BP, Pulse, Respiratory Rate, and Delta
+    
     vitals_cols = [c for c in df.columns if any(x in c.lower() for x in ['weight', 'bp', 'blood_pressure', 'pulse', 'respiratory', 'delta', 'height'])]
     print(f"\n[2] KEY VITAL FEATURES: {vitals_cols}")
     
-    # 3. Missing Values Percentage
+    
     print("\n[3] MISSING VALUES PERCENTAGE:")
     missing_pct = (df.isnull().sum() / len(df)) * 100
     print(missing_pct.sort_values(ascending=False).head(15))
     
-    # 4. Longitudinal Check
+    
     unique_patients = df['subject_id'].nunique()
     print(f"\nTotal Records: {len(df)}")
     print(f"Unique Patients: {unique_patients}")
     print(f"Avg records per patient: {len(df)/unique_patients:.2f}")
-    
-    # 5. Sample Data
+  
     print("\n[5] SAMPLE DATA (First 5 rows):")
     print(df.head())
 else:
