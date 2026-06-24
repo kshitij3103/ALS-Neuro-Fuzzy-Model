@@ -1,67 +1,107 @@
-# 🧠 ALS Disease Progression Prediction using Neuro-Fuzzy Systems
+ALS Progression Prediction: An Explainable Cluster-Based ANFIS Approach
+Python 3.12+PyTorchLicense: MIT
 
-![Python Version](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
-![Machine Learning](https://img.shields.io/badge/AI-Neuro--Fuzzy-orange)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+Authors: Kshitij Kataria & Yash Chaudhary
 
-> **An Adaptive Neuro-Fuzzy Inference System (ANFIS) designed to model and forecast the progression of Amyotrophic Lateral Sclerosis (ALS) using longitudinal clinical trial data.**
+This repository contains the official codebase for predicting the functional progression of Amyotrophic Lateral Sclerosis (ALS) using a hybrid-learning Adaptive Neuro-Fuzzy Inference System (ANFIS).
 
-## 📑 Table of Contents
-- [The Problem: Deep Learning's "Black Box"](#the-problem-deep-learnings-black-box)
-- [The Solution: Why Neuro-Fuzzy?](#the-solution-why-neuro-fuzzy)
-- [Project Content: How the Model Works](#project-content-how-the-model-works)
-- [Dataset & Important Notice](#dataset--important-notice)
-- [Project Architecture](#project-architecture)
-- [Getting Started](#getting-started)
+The primary contribution of this work is an interpretable, parameter-efficient prognostic tool that achieves highly competitive performance against black-box Deep Learning (DL) models while utilizing significantly fewer parameters (~160 vs >3000) and exclusively relying on 5 clinical features.
 
----
+Table of Contents
+Background & Motivation
+Key Features
+Software & Dependencies
+Repository Structure
+Data & Reproducibility
+How to Run
+Model Methodology
+Background & Motivation
+ALS is a devastating neurodegenerative disease with highly heterogeneous disease progression. While recent Deep Learning models have demonstrated high predictive accuracy on datasets like PRO-ACT, they inherently act as "black boxes." In critical clinical settings, physicians require transparency and interpretability to trust a model's prognosis.
 
-## 🛑 The Problem: Deep Learning's "Black Box"
-While traditional Deep Learning (DL) models are powerful at finding hidden patterns in clinical data, they suffer from a major critical flaw in healthcare applications: **a complete lack of interpretability.** When a standard Neural Network predicts a rapid decline in an ALS patient, it cannot explain *why* it reached that conclusion. It acts as a "black box," making it incredibly difficult for clinicians to trust the output, validate the reasoning, or use the model to make life-altering patient care decisions. Furthermore, DL models often struggle to handle the high degree of uncertainty, noise, and missing values inherent in longitudinal medical records.
+Our ANFIS approach bridges this gap by generating explicit, linguistic IF-THEN fuzzy rules (e.g., IF FVC is low AND Age is high THEN Progression is Fast). This framework provides a clear interpretability-versus-capacity trade-off, offering actionable insights for clinical trial stratification and patient counseling.
 
-## 💡 The Solution: Why Neuro-Fuzzy?
-This project overcomes the limitations of deep learning by implementing an **Adaptive Neuro-Fuzzy Inference System (ANFIS)**. 
+Key Features
+Intrinsic Interpretability: Extracts a 10-rule fuzzy rule base that directly mirrors clinical reasoning, completely bypassing the need for post-hoc explainers like SHAP/LIME.
+Parameter Efficiency: The entire ensemble operates on roughly ~160 parameters, demonstrating robust resistance to overfitting and a very low data-acquisition burden.
+Strict Data Hygiene: Implementation of rigorous patient-level KFold cross-validation with internal, dynamic IQR-based outlier mitigation and median imputation to ensure zero data leakage between folds.
+Automated Pipeline: 1-click execution for the entire workflow—from raw clinical tables to final visual analytics and rule-extraction tables.
+Software & Dependencies
+The project is built on Python 3.12+. Core dependencies include:
 
-ANFIS bridges the gap between machine learning and human reasoning. It extracts the raw predictive power of artificial neural networks and maps it onto the mathematical framework of Fuzzy Logic. 
+torch (ANFIS neural architecture & optimization)
+scikit-learn (Cross-validation, pre-processing, and baselines)
+xgboost (Gradient boosted baselines)
+pandas & numpy (Data manipulation)
+matplotlib & seaborn (High-quality, print-ready visualizations)
+scipy (Statistical testing and Pearson Correlation measurements)
+Installation:
 
-**Key Improvements over Standard Deep Learning:**
-1. **Total Interpretability:** Instead of hidden weights and biases, the ANFIS model generates explicit, human-readable **IF-THEN rules** (e.g., *IF Creatinine is LOW and CK is HIGH, THEN Progression is RAPID*).
-2. **Handling Clinical Uncertainty:** Medical data isn't strictly binary. Fuzzy logic allows the model to process "degrees of truth" (e.g., a lab value being 70% "Normal" and 30% "Elevated"), perfectly mirroring how doctors actually interpret borderline lab results.
-3. **Clinician Trust:** By outputting both an accurate mathematical prediction and the logical rules used to get there, this model serves as a transparent decision-support tool rather than an opaque oracle.
+bash
 
----
+pip install -r requirements.txt
+# Alternatively:
+pip install torch scikit-learn pandas numpy matplotlib seaborn xgboost scipy
+Repository Structure
+text
 
-## ⚙️ Project Content: How the Model Works
-This repository contains the complete pipeline for ingesting patient laboratory data and training the ANFIS architecture. The core workflow of the project does the following:
-
-1. **Data Ingestion & Preprocessing:** Cleans longitudinal lab data from the PRO-ACT database, handling the specific noise and irregular time-intervals found in ALS clinical trials.
-2. **Fuzzification:** The model takes raw numerical lab values (e.g., Blood Urea Nitrogen, Creatinine) and converts them into "fuzzy sets" with specific membership functions (Low, Normal, High).
-3. **Neural Training:** A neural network architecture (typically using backpropagation and least squares estimation) learns the optimal shape of these fuzzy sets and the best rules to connect them based on historical patient outcomes.
-4. **Defuzzification & Forecasting:** The model evaluates a new patient's current lab markers against the learned rules to output a crisp, numerical prediction of their future ALSFRS-R score (disease progression rate).
-
----
-
-## 📊 Dataset & Important Notice
-This project relies on the **PRO-ACT (Pooled Resource Open-Access ALS Clinical Trials)** database.
-
-🚨 **WARNING: Large Dataset Excluded** 🚨
-To comply with GitHub's file size limits, the primary raw data file (`F_PROACT_LABS.csv` - ~138 MB) is **not** included in this repository. 
-
-**To run this project locally:**
-1. Download the `F_PROACT_LABS.csv` file from the PRO-ACT database.
-2. Place the file precisely at: `data/raw-data/F_PROACT_LABS.csv`
-
----
-
-## 🏗️ Project Architecture
-```text
-ALS-Neuro-Fuzzy-Model/
-│
+.
+├── main.py                     # Master execution script (Runs the entire pipeline end-to-end)
+├── step1_preprocessing.py      # Phase 1: Cleans raw clinical tables & computes target slopes
+├── step2_feature_engineering.py # Phase 2: Extracts longitudinal metrics (Min, Max, Median, Slope)
+├── step3_model_training.py     # Phase 3: Trains baselines and the cross-validated ANFIS ensemble
+├── step4_visualization.py      # Phase 4: Generates print-ready plots, rules tables, and results
 ├── data/
-│   ├── raw-data/         # Place F_PROACT_LABS.csv here
-│   └── processed-data/   # Cleaned, normalized datasets
-│
-├── src/                  # Source code for data preprocessing and ANFIS implementation
-├── notebooks/            # Jupyter notebooks for exploratory data analysis
-├── .gitignore
-└── README.md
+│   ├── raw-data/               # Original clinical files (CSV format)
+│   └── preprocessed-data/      # Master dataset and trained PyTorch model weights (.pth)
+├── analysis/                   # Output directory for plots, correlation matrices, and metrics
+└── scripts/
+    └── detailed scripts/       # Full library of 30+ granular, modular development scripts
+Data & Reproducibility
+To comply with open-science and peer-review standards for clinical ML research:
+
+Dataset: This study utilizes the PRO-ACT (Pooled Resource Open-Access ALS Clinical Trials) database. Due to strict data privacy regulations, the raw PRO-ACT database is only available to registered researchers via the PRO-ACT portal.
+Reproducibility: All data-processing scripts, inclusion filters, and model code used in this study are provided in this repository. To guarantee exact reproducibility, a global random seed (np.random.seed(42), torch.manual_seed(42)) is enforced across all data splits, KMeans initializations, and model training loops.
+How to Run
+Execution Time: The complete pipeline takes approximately 10-15 minutes depending on your local hardware.
+
+Option 1: End-to-End Execution (Recommended)
+Run the entire project from raw data parsing to final evaluation with a single command:
+
+bash
+
+python main.py
+Note: The analysis/ folder will be automatically refreshed and populated with new, high-resolution visual outputs upon completion.
+
+Option 2: Modular Execution
+If you need to isolate specific phases of the workflow, execute the numbered steps sequentially:
+
+bash
+
+python step1_preprocessing.py
+python step2_feature_engineering.py
+python step3_model_training.py
+python step4_visualization.py
+Model Methodology: Leakage-Free ANFIS
+Target Variable: The continuous ALSFRS-R functional decline slope between the 3-month (
+t
+1
+t 
+1
+​
+ ) and 12-month (
+t
+2
+t 
+2
+​
+ ) clinical observation window.
+Input Features: Extracted exclusively from the 
+t
+0
+t 
+0
+​
+  to 3-month window. Restricted to 5 strictly selected features to prevent dimensionality explosion.
+Hybrid Learning: Employs K-Means clustering for premise initialization, Gradient Descent (Adam) for Gaussian width (
+σ
+σ) optimization, and Recursive Least Squares Estimation (LSE) for consequent parameter tuning.
